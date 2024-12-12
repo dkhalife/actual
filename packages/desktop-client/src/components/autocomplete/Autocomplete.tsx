@@ -54,7 +54,7 @@ type CommonAutocompleteProps<T extends Item> = {
   onClose?: () => void;
 };
 
-type Item = {
+export type Item = {
   id?: string;
   name: string;
 };

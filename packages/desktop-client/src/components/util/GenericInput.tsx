@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type CSSProperties, type MutableRefObject } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useReports } from 'loot-core/client/data-hooks/reports';
@@ -22,7 +22,46 @@ import { RecurringSchedulePicker } from '../select/RecurringSchedulePicker';
 import { AmountInput } from './AmountInput';
 import { PercentInput } from './PercentInput';
 
-export function GenericInput({
+type InputType = 'id' | 'saved' | 'date' | 'boolean' | 'number';
+
+type FieldTypes<T extends InputType> = T extends 'id'
+  ? 'payee' | 'account' | 'category'
+  : T extends 'saved'
+    ? 'saved' | 'report'
+    : T extends 'date'
+      ? 'month' | 'year'
+      : T extends boolean
+        ? undefined
+        : never;
+
+type ValueTypes<T extends InputType> = T extends 'id'
+  ? string
+  : T extends 'saved'
+    ? boolean
+    : T extends 'date'
+      ? string
+      : T extends 'boolean'
+        ? boolean
+        : T extends 'number'
+          ? number
+          : never;
+
+type MaybeMulti<T, M extends boolean> = M extends true ? T[] : T;
+
+type GenericInputProps<T extends InputType, M extends boolean> = {
+  type: T;
+  field: FieldTypes<T>;
+  multi: M;
+  value: MaybeMulti<ValueTypes<T>, M>;
+  subfield: string;
+  numberFormatType: 'currency' | 'percentage';
+  inputRef: MutableRefObject<HTMLInputElement>;
+  style: CSSProperties;
+  onChange: (newValue: unknown) => void;
+  op: 'onBudget' | 'offBudget' | undefined;
+};
+
+export function GenericInput<T extends InputType, M extends boolean>({
   field,
   subfield,
   type,
@@ -33,7 +72,7 @@ export function GenericInput({
   style,
   onChange,
   op = undefined,
-}) {
+}: GenericInputProps<T, M>) {
   const { grouped: categoryGroups } = useCategories();
   const { data: savedReports } = useReports();
   const saved = useSelector(state => state.queries.saved);
@@ -261,8 +300,8 @@ export function GenericInput({
             inputRef={inputRef}
             defaultValue={value || ''}
             placeholder="nothing"
-            onEnter={e => onChange(e.target.value)}
-            onBlur={e => onChange(e.target.value)}
+            onEnter={e => onChange((e.target as HTMLInputElement).value)}
+            onBlur={e => onChange((e.target as HTMLInputElement).value)}
           />
         );
       }

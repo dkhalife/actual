@@ -15,6 +15,7 @@ export type QueriesState = {
   commonPayees: Awaited<ReturnType<Handlers['common-payees-get']>>;
   payees: Awaited<ReturnType<Handlers['payees-get']>>;
   payeesLoaded: boolean;
+  saved: unknown; // TBD: what type is this?
 };
 
 type SetNewTransactionsAction = {
