@@ -96,6 +96,9 @@ export function ExperimentalFeatures() {
             >
               <Trans>Context menus</Trans>
             </FeatureToggle>
+            <FeatureToggle flag="sankieChart">
+              <Trans>Sankie chart</Trans>
+            </FeatureToggle>
           </View>
         ) : (
           <Link
