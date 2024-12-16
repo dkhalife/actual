@@ -43,6 +43,7 @@ import { SpendingCard } from './reports/SpendingCard';
 import './overview.scss';
 import { SummaryCard } from './reports/SummaryCard';
 import { useFeatureFlag } from '../../hooks/useFeatureFlag';
+import { SankieCard } from './reports/SankieCard';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -562,7 +563,13 @@ export function Overview() {
                     onRemove={() => onRemoveWidget(item.i)}
                   />
                 ) : item.type === 'sankie-card' ? (
-                  <div>Hello</div>
+                  <SankieCard
+                    widgetId={item.i}
+                    isEditing={isEditing}
+                    meta={item.meta}
+                    onMetaChange={newMeta => onMetaChange(item, newMeta)}
+                    onRemove={() => onRemoveWidget(item.i)}
+                  />
                 ) : null}
               </div>
             ))}
