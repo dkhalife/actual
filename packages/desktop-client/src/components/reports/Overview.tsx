@@ -42,6 +42,7 @@ import { NetWorthCard } from './reports/NetWorthCard';
 import { SpendingCard } from './reports/SpendingCard';
 import './overview.scss';
 import { SummaryCard } from './reports/SummaryCard';
+import { useFeatureFlag } from '../../hooks/useFeatureFlag';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -294,6 +295,7 @@ export function Overview() {
   };
 
   const accounts = useAccounts();
+  const enableSankie = useFeatureFlag('sankieChart');
 
   if (isLoading) {
     return <LoadingIndicator message={t('Loading reports...')} />;
@@ -393,6 +395,14 @@ export function Overview() {
                           name: 'calendar-card' as const,
                           text: t('Calendar card'),
                         },
+                        ...(enableSankie
+                          ? [
+                              {
+                                name: 'sankie-card' as const,
+                                text: t('Sankie card'),
+                              },
+                            ]
+                          : []),
                         {
                           name: 'custom-report' as const,
                           text: t('New custom report'),
@@ -551,6 +561,8 @@ export function Overview() {
                     onMetaChange={newMeta => onMetaChange(item, newMeta)}
                     onRemove={() => onRemoveWidget(item.i)}
                   />
+                ) : item.type === 'sankie-card' ? (
+                  <div>Hello</div>
                 ) : null}
               </div>
             ))}
