@@ -567,6 +567,7 @@ export function Overview() {
                     widgetId={item.i}
                     isEditing={isEditing}
                     meta={item.meta}
+                    accounts={accounts}
                     onMetaChange={newMeta => onMetaChange(item, newMeta)}
                     onRemove={() => onRemoveWidget(item.i)}
                   />
